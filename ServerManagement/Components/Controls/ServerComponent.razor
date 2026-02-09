@@ -1,0 +1,7 @@
+﻿<P style="color:@(server.IsOnline?"green":"red")">
+   @server.Name is in @server.City and is @(server.IsOnline?"online":"offline") at @DateTime.Now
+</P>
+
+@code {
+    private Server server = new Server { Name = "Server 1", City = "Toronto" };
+}
