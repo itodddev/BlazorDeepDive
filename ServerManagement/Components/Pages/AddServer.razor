@@ -1,19 +1,16 @@
-﻿@page "/servers/{id:int}"
+﻿@page "/servers/add"
 
 @inject NavigationManager NavigationManager
 
-<h3>Edit Server</h3>
+<h3>Add Server</h3>
 <br />
 <br />
 
-@if (server != null)
-{
+
     <EditForm Model="server" FormName="formServer" OnValidSubmit="Submit">
         <DataAnnotationsValidator></DataAnnotationsValidator>
         <ValidationSummary></ValidationSummary>
-        
-        <InputNumber @bind-Value="server.ServerId" hidden></InputNumber>
-        
+
         <div class="row mb-3">
             <div class="col-2">
                 <label class="col-form-label">Name</label>
@@ -46,31 +43,22 @@
                 <InputCheckbox @bind-Value="server.IsOnline" class="form-check-input"></InputCheckbox>
             </div>
         </div>
-        <br/>
-        <button class="btn btn-primary" type="submit">Update</button>
+        <br />
+        <button class="btn btn-primary" type="submit">Save</button>
         &nbsp;
         <a href="/servers" class="btn btn-primary">Close</a>
     </EditForm>
-}
 
 
 @code {
-    [Parameter]
-    public int Id { get; set; }
-
-    [SupplyParameterFromForm(FormName="formServer")]
-    private Server? server { get; set; } // Do null check above since Server can be null, also turn into a parameter so that we can set it from the form submit
-
-    protected override void OnParametersSet()
-    {
-        server ??= ServersRepository.GetServerById(this.Id);  // only get the server if it hasn't been set by the form submit, otherwise we would lose the changes
-    }
+    [SupplyParameterFromForm] // This attribute allows the component to receive values from the form submission.
+    private Server? server { get; set; } = new Server() {IsOnline = false};
 
     private void Submit()
     {
         if (server != null)
         {
-            ServersRepository.UpdateServer(server.ServerId, server);
+            ServersRepository.AddServer(server);
         }
 
         NavigationManager.NavigateTo("/servers");

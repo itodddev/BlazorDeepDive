@@ -34,6 +34,8 @@
     }
 </ul>
 
+<a href="/servers/add" class="btn btn-primary">Add Server</a>
+
 @code {
     private List<Server> servers = ServersRepository.GetServersByCity("Toronto");
     private List<string> cities = CitiesRepository.GetCities();
