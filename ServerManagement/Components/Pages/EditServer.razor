@@ -6,16 +6,21 @@
 
 @if (server != null)
 {
-    <EditForm Model="server" FormName="formServer" OnSubmit="Submit">
+    <EditForm Model="server" FormName="formServer" OnValidSubmit="Submit">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+        <ValidationSummary></ValidationSummary>
         
         <InputNumber @bind-Value="server.ServerId" hidden></InputNumber>
-
+        
         <div class="row mb-3">
             <div class="col-2">
                 <label class="col-form-label">Name</label>
             </div>
             <div class="col-6">
                 <InputText @bind-Value="server.Name" class="form-control"></InputText>
+            </div>
+            <div class="col">
+                <ValidationMessage For="() => server.Name"></ValidationMessage>
             </div>
         </div>
 
@@ -25,6 +30,9 @@
             </div>
             <div class="col-6">
                 <InputText @bind-Value="server.City" class="form-control"></InputText>
+            </div>
+            <div class="col">
+                <ValidationMessage For="() => server.City"></ValidationMessage>
             </div>
         </div>
 
@@ -49,7 +57,7 @@
     public int Id { get; set; }
 
     [SupplyParameterFromForm(FormName="formServer")]
-    private Server? server { get; set; } // Do null check above since Server can be null
+    private Server? server { get; set; } // Do null check above since Server can be null, also turn into a parameter so that we can set it from the form submit
 
     protected override void OnParametersSet()
     {
@@ -58,7 +66,10 @@
 
     private void Submit()
     {
-
+        if (server != null)
+        {
+            ServersRepository.UpdateServer(server.ServerId, server);
+        }
     }
 
 }
